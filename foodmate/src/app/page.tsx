@@ -1,23 +1,28 @@
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold mb-6">Sign Up</h1>
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-yellow-100 p-6">
+      <div className="max-w-2xl text-center space-y-6">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900">
+          Welcome to <span className="text-orange-600">FoodMate</span>
+        </h1>
+        <p className="text-gray-600 text-lg md:text-xl">
+          Your friendly neighborhood food ordering app — fast, fresh, and right to your door.
+        </p>
 
-      <form className="w-full max-w-sm space-y-4">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email Address
-        </label>
-        <Input id="email" type="email" placeholder="Your email" />
-
-        <button
-          type="submit"
-          className="mt-4 w-full rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition"
-        >
-          Submit
-        </button>
-      </form>
+        <form className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
+          <Input
+            type="email"
+            placeholder="Enter your email"
+            className="w-full max-w-xs"
+          />
+          <Button type="submit" className="w-full sm:w-auto">
+            Get Started
+          </Button>
+        </form>
+      </div>
     </main>
   );
 }
