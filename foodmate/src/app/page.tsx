@@ -14,7 +14,7 @@ export default function Home() {
     <main className="relative min-h-screen flex flex-col p-6">
       {/* Background image */}
       <div
-        className="absolute inset-0 -z-10 bg-cover bg-center opacity-80"
+        className="absolute inset-0 -z-10 bg-cover bg-center opacity-60"
         style={{ backgroundImage: "url('/bg-foodmate.webp')" }}
       />
 
@@ -36,7 +36,6 @@ export default function Home() {
           <Button
             size="icon"
             variant="ghost"
-	    className="text-white hover:bg-white/20"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             <Menu className="w-6 h-6" />
@@ -51,7 +50,7 @@ export default function Home() {
             </Button>
           </Link>
           <Link href="/register">
-            <Button className="bg-orange-600 text-white hover:bg-orange-700">
+            <Button className="bg-orange-600/70 text-white hover:bg-orange-700">
               Register
             </Button>
           </Link>
@@ -67,7 +66,7 @@ export default function Home() {
             </Button>
           </Link>
           <Link href="/register" className="w-full max-w-xs">
-            <Button className="w-full bg-orange-600 text-white hover:bg-orange-700">
+            <Button className="w-full bg-orange-600/70 text-white hover:bg-orange-700">
               Register
             </Button>
           </Link>
@@ -76,7 +75,7 @@ export default function Home() {
 
       {/* Center content */}
       <div className="flex-grow flex items-center justify-center">
-        <div className="max-w-2xl w-full text-center space-y-6 bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-lg">
+        <div className="max-w-2xl w-full text-center space-y-6 bg-white/30 backdrop-blur-md rounded-2xl p-8 shadow-lg">
           <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900">
             Welcome to <span className="text-orange-600">FoodMate</span>
           </h1>
