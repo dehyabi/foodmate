@@ -43,7 +43,7 @@ export default function LoginPage() {
       />
 
       {/* Login Card */}
-      <Card className="w-full max-w-sm bg-white/30 backdrop-blur-md shadow-xl">
+      <Card className="w-full max-w-sm bg-white/30 backdrop-blur-md shadow-xl border-none outline-none ring-0">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Login to FoodMate</CardTitle>
         </CardHeader>
