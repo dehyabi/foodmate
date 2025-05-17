@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
-    container_name: nextjs-docker
+    container_name: foodmate
     volumes:
       - .:/app
     ports:
