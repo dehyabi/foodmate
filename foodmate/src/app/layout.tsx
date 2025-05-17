@@ -12,9 +12,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "FoodMate | Fresh, Fast & Friendly",
-  description: "Order food from your favorite restaurants with FoodMate – fast delivery, great taste.",
+  description: "Order food from your favorite restaurants with FoodMate ... fast delivery, great taste",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -24,6 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -32,3 +36,4 @@ export default function RootLayout({
     </html>
   );
 }
+
