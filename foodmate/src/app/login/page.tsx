@@ -23,13 +23,14 @@ export default function LoginPage() {
     setError('');
 
     // Simple hardcoded validation example
-    if (email === 'admin@foodmate.com' && password === 'admin123') {
-      localStorage.setItem('role', 'admin');
-      router.push('/admin/dashboard');
-    } else if (email === 'user@foodmate.com' && password === 'user123') {
-      localStorage.setItem('role', 'user');
-      router.push('/dashboard');
-    } else {
+   	if (email === 'admin@foodmate.com' && password === 'admin123') {
+  	localStorage.setItem('user', JSON.stringify({ role: 'admin' }));
+  	router.push('/admin/dashboard');
+	} else if (email === 'user@foodmate.com' && password === 'user123') {
+  	localStorage.setItem('user', JSON.stringify({ role: 'user' }));
+  	router.push('/dashboard');
+	}
+	 else {
       setError('Invalid email or password.');
     }
   };
