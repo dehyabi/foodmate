@@ -12,42 +12,31 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+export default function RegisterPage() {
   const router = useRouter();
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'user',
+  });
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
-  setError('');
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  // Check for admin (hardcoded)
-  if (email === 'admin@foodmate.com' && password === 'admin123') {
-    localStorage.setItem(
-      'user',
-      JSON.stringify({ email, role: 'admin' })
-    );
-    router.push('/admin/dashboard');
-    return;
-  }
+  const handleRegister = () => {
+    setError('');
 
-  // Check for user in localStorage
-  const storedUser = localStorage.getItem('registeredUser');
-  if (storedUser) {
-    const parsed = JSON.parse(storedUser);
-    if (parsed.email === email && parsed.password === password) {
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ email: parsed.email, role: 'user' })
-      );
-      router.push('/dashboard');
+    if (!form.name || !form.email || !form.password) {
+      setError('All fields are required.');
       return;
     }
-  }
 
-  // If no match
-  setError('Invalid email or password.');
-};
+    localStorage.setItem('registeredUser', JSON.stringify(form));
+    router.push('/login');
+  };
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center p-6">
@@ -57,32 +46,48 @@ export default function LoginPage() {
         style={{ backgroundImage: "url('/bg-foodmate.webp')" }}
       />
 
-      {/* Login Card */}
+      {/* Register Card */}
       <Card className="w-full max-w-sm bg-white/30 backdrop-blur-md shadow-xl border-none outline-none ring-0">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Login to FoodMate</CardTitle>
+          <CardTitle className="text-2xl text-center">Register to FoodMate</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              name="name"
+              type="text"
+              placeholder="Your full name"
+              value={form.name}
+              onChange={handleChange}
+              autoComplete="name"
+            />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
+              name="email"
               type="email"
               placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={form.email}
+              onChange={handleChange}
               autoComplete="email"
             />
           </div>
+
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
+              name="password"
               type="password"
               placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
+              value={form.password}
+              onChange={handleChange}
+              autoComplete="new-password"
             />
           </div>
 
@@ -91,17 +96,16 @@ export default function LoginPage() {
             <p className="text-red-600 text-sm text-center">{error}</p>
           )}
 
-          <Button className="w-full" onClick={handleLogin}>
-            Sign In
+          <Button className="w-full" onClick={handleRegister}>
+            Register
           </Button>
 
           <p className="text-xs text-center text-muted-foreground">
-  	Don&apos;t have an account?{' '}
-	  <a href="/register" className="text-blue-600 hover:underline">
-    	   Register here
-           </a>
-	</p>
-
+            Already have an account?{' '}
+            <a href="/login" className="text-blue-600 hover:underline">
+              Login here
+            </a>
+          </p>
         </CardContent>
       </Card>
     </main>
