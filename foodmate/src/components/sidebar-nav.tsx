@@ -45,6 +45,7 @@ export function SidebarNav() {
 
   const userNavItems = [
     { href: '/dashboard', icon: <Home />, label: 'Dashboard' },
+    { href: '/dashboard/restaurants', icon: <Utensils />, label: 'Restaurants' },
     { href: '/dashboard/orders', icon: <ClipboardList />, label: 'My Orders' },
     { href: '/dashboard/favorites', icon: <Heart />, label: 'Favorites' },
     { href: '/dashboard/profile', icon: <UserIcon />, label: 'Profile' },
