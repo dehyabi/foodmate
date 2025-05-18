@@ -33,9 +33,22 @@ export default function AdminDashboardLayout({
   if (isAdmin === null) return null; // Loading state
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    router.push('/login');
-  };
+  const loggedUser = JSON.parse(localStorage.getItem('user'));
+  if (!loggedUser) return;
+
+  const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+
+  const updatedUsers = users.map(user =>
+    user.email === loggedUser.email ? { ...user, status: 'offline' } : user
+  );
+
+  localStorage.setItem('registeredUsers', JSON.stringify(updatedUsers));
+
+  // Remove current logged in user from storage
+  localStorage.removeItem('user');
+
+  router.push('/login');
+};
 
   return (
     <div className="relative min-h-screen flex">

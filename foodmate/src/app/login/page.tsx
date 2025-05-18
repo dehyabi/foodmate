@@ -19,35 +19,32 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleLogin = () => {
-  setError('');
+    setError('');
 
-  // Check for admin (hardcoded)
-  if (email === 'admin@foodmate.com' && password === 'admin123') {
-    localStorage.setItem(
-      'user',
-      JSON.stringify({ email, role: 'admin' })
-    );
-    router.push('/admin/dashboard');
-    return;
-  }
-
-  // Check for user in localStorage
-  const storedUser = localStorage.getItem('registeredUser');
-  if (storedUser) {
-    const parsed = JSON.parse(storedUser);
-    if (parsed.email === email && parsed.password === password) {
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ email: parsed.email, role: 'user' })
-      );
-      router.push('/dashboard');
+    // Admin hardcoded login
+    if (email === 'admin@foodmate.com' && password === 'admin123') {
+      localStorage.setItem('user', JSON.stringify({ email, role: 'admin', status: 'online' }));
+      router.push('/admin/dashboard');
       return;
     }
-  }
 
-  // If no match
-  setError('Invalid email or password.');
-};
+    // User login from registeredUsers in localStorage
+    const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    const foundUser = users.find(user => user.email === email && user.password === password);
+
+    if (foundUser) {
+      // Update status to online
+      const updatedUsers = users.map(user =>
+        user.email === email ? { ...user, status: 'online' } : user
+      );
+      localStorage.setItem('registeredUsers', JSON.stringify(updatedUsers));
+      localStorage.setItem('user', JSON.stringify({ ...foundUser, status: 'online' }));
+
+      router.push('/dashboard');
+    } else {
+      setError('Invalid email or password.');
+    }
+  };
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center p-6">

@@ -27,16 +27,36 @@ export default function RegisterPage() {
   };
 
   const handleRegister = () => {
-    setError('');
+  setError('');
 
-    if (!form.name || !form.email || !form.password) {
-      setError('All fields are required.');
+  if (!form.name || !form.email || !form.password) {
+    setError('All fields are required.');
+    return;
+  }
+
+   if (form.email === 'admin@foodmate.com') {
+      setError('This email is reserved and cannot be used.');
       return;
     }
 
-    localStorage.setItem('registeredUser', JSON.stringify(form));
-    router.push('/login');
-  };
+  // Get existing users array or initialize empty array
+  const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+
+  // Check if email already exists
+  const userExists = existingUsers.some(user => user.email === form.email);
+  if (userExists) {
+    setError('Email is already registered.');
+    return;
+  }
+
+  // Add new user with status 'offline'
+  const newUser = { ...form, status: 'offline' };
+  existingUsers.push(newUser);
+
+  // Save updated users array
+  localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+  router.push('/login');
+};
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center p-6">
