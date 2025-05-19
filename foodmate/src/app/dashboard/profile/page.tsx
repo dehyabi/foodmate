@@ -59,6 +59,7 @@ export default function UserProfilePage() {
               value={formData.name}
               onChange={handleChange}
               disabled={!editing}
+	      className="border border-gray-400"
               placeholder="Your name"
             />
           </div>
@@ -71,7 +72,7 @@ export default function UserProfilePage() {
               value={formData.email}
               onChange={handleChange}
               disabled
-              className="bg-gray-100 cursor-not-allowed"
+              className="border border-gray-400 cursor-not-allowed"
             />
           </div>
 
@@ -82,6 +83,7 @@ export default function UserProfilePage() {
               name="password"
               value={formData.password}
               onChange={handleChange}
+	      className="border border-gray-400"
               disabled={!editing}
               placeholder="••••••••"
             />
