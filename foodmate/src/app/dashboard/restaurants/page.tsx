@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import toast from 'react-hot-toast';
 
 type MenuItem = {
   id: string;
@@ -56,7 +57,7 @@ export default function UserRestaurantsPage() {
 
     localStorage.setItem('orders', JSON.stringify([...parsed, order]));
 
-    alert(`Ordered: ${item.name}`);
+    toast.success(`Ordered ${item.name} from ${selectedRestaurant!.name}`);
   };
 
   return (

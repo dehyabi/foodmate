@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Menu, LogOut } from 'lucide-react';
 import { SidebarNav } from '@/components/sidebar-nav';
+import { Toaster } from 'react-hot-toast';
 
 export default function UserDashboardLayout({
   children,
@@ -21,20 +22,26 @@ export default function UserDashboardLayout({
       return;
     }
 
-    const parsed = JSON.parse(userData);
-    if (parsed.role !== 'user') {
+    try {
+      const parsed = JSON.parse(userData);
+      if (parsed.role !== 'user') {
+        router.push('/login');
+      } else {
+        setIsUser(true);
+      }
+    } catch {
+      localStorage.removeItem('user');
       router.push('/login');
-    } else {
-      setIsUser(true);
     }
   }, [router]);
 
-  if (isUser === null) return null; // Loading state
+  if (isUser === null) return null; // Loading
 
   const handleLogout = () => {
-    const loggedUser = JSON.parse(localStorage.getItem('user'));
-    if (!loggedUser) return;
+    const loggedUserRaw = localStorage.getItem('user');
+    if (!loggedUserRaw) return;
 
+    const loggedUser = JSON.parse(loggedUserRaw);
     const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
 
     const updatedUsers = users.map((user: any) =>
@@ -48,6 +55,9 @@ export default function UserDashboardLayout({
 
   return (
     <div className="relative min-h-screen flex">
+      {/* Toast Notifications */}
+      <Toaster position="top-right" />
+
       {/* Background */}
       <div
         className="absolute inset-0 -z-10 bg-cover bg-center opacity-60 backdrop-blur-sm"
