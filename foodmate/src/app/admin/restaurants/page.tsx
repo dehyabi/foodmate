@@ -1,14 +1,43 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const restaurants = [
-  { id: 1, name: 'Pasta Palace', location: 'New York', status: 'Open' },
-  { id: 2, name: 'Sushi Spot', location: 'Tokyo', status: 'Closed' },
-  { id: 3, name: 'Burger Haven', location: 'Los Angeles', status: 'Open' },
-];
+interface MenuItem {
+  id: string;
+  name: string;
+  price: number;
+}
+
+interface Restaurant {
+  id: string;
+  name: string;
+  description: string;
+  menu: MenuItem[];
+  location: string;
+  status: string;
+}
 
 export default function AdminRestaurantsPage() {
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('restaurants');
+
+    if (stored) {
+      const parsed = JSON.parse(stored);
+
+      // Add fallback `location` and `status` if missing
+      const enriched = parsed.map((r: any, index: number) => ({
+        ...r,
+        location: r.location || ['New York', 'Tokyo', 'Los Angeles'][index % 3],
+        status: r.status || (index % 2 === 0 ? 'Open' : 'Closed'),
+      }));
+
+      setRestaurants(enriched);
+    }
+  }, []);
+
   return (
     <main className="h-[100%] p-6 bg-white/30 backdrop-blur-md rounded-2xl overflow-hidden">
       <h1 className="text-3xl font-bold mb-6">Restaurants</h1>
@@ -34,6 +63,12 @@ export default function AdminRestaurantsPage() {
                 >
                   {restaurant.status}
                 </span>
+              </p>
+              <p>
+                <strong>Description:</strong> {restaurant.description}
+              </p>
+              <p>
+                <strong>Menu items:</strong> {restaurant.menu.length}
               </p>
             </CardContent>
           </Card>
