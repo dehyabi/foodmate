@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 type Restaurant = {
-  id: number;
+  id: string;
   name: string;
   cuisine: string;
   rating: number;
@@ -14,13 +14,15 @@ export default function UserRestaurantsPage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(() => {
-    // Simulate fetching from localStorage or API
-    const mockData: Restaurant[] = [
-      { id: 1, name: 'Tasty Bites', cuisine: 'Italian', rating: 4.5 },
-      { id: 2, name: 'Spice Villa', cuisine: 'Indian', rating: 4.2 },
-      { id: 3, name: 'Green Garden', cuisine: 'Vegan', rating: 4.8 },
-    ];
-    setRestaurants(mockData);
+    const stored = localStorage.getItem('restaurants');
+    if (stored) {
+      try {
+        const parsed: Restaurant[] = JSON.parse(stored);
+        setRestaurants(parsed);
+      } catch (err) {
+        console.error('Failed to parse restaurants from localStorage:', err);
+      }
+    }
   }, []);
 
   return (
@@ -29,7 +31,10 @@ export default function UserRestaurantsPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {restaurants.map((restaurant) => (
-          <Card key={restaurant.id} className="bg-white/30 backdrop-blur-md hover:shadow-lg transition">
+          <Card
+            key={restaurant.id}
+            className="bg-white/30 backdrop-blur-md hover:shadow-lg transition"
+          >
             <CardHeader>
               <CardTitle>{restaurant.name}</CardTitle>
             </CardHeader>
