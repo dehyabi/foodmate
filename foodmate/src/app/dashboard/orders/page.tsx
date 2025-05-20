@@ -2,17 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type Order = {
   id: string;
   restaurant: string;
   items: { id: string; name: string; quantity: number }[];
   total: number;
-  status: 'Pending' | 'Preparing' | 'Delivered' | 'Cancelled';
+  status: 'Pending';
 };
 
 export default function UserOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   useEffect(() => {
     const stored = localStorage.getItem('orders');
@@ -21,51 +24,89 @@ export default function UserOrdersPage() {
         const parsed: Order[] = JSON.parse(stored);
         setOrders(parsed);
       } catch (err) {
-        console.error('Failed to parse orders from localStorage:', err);
+        console.error('Failed to parse orders:', err);
       }
     }
   }, []);
 
+  const totalPages = Math.ceil(orders.length / itemsPerPage);
+  const paginatedOrders = orders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <main className="h-full p-6 bg-white/30 backdrop-blur-md rounded-2xl">
-      <h1 className="text-3xl font-bold mb-6">My Orders</h1>
+      <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
 
       {orders.length === 0 ? (
-        <p className="text-gray-600">You haven't placed any orders yet.</p>
+        <p className="text-gray-600">You have no orders yet.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {orders.map((order) => (
-            <Card key={order.id} className="bg-white/30 backdrop-blur-md hover:shadow-lg transition">
-              <CardHeader>
-                <CardTitle>Order #{order.id}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="text-gray-700 font-medium">
-                  Restaurant: {order.restaurant}
-                </p>
-                <p className="text-sm text-gray-600">
-                  Items: {order.items.map((i) => `${i.name} x${i.quantity}`).join(', ')}
-                </p>
-                <p className="text-gray-800 font-semibold">
-                  Total: ${order.total.toFixed(2)}
-                </p>
-                <span
-                  className={`inline-block px-3 py-1 text-sm rounded-full ${
-                    order.status === 'Delivered'
-                      ? 'bg-green-100 text-green-800'
-                      : order.status === 'Preparing'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : order.status === 'Pending'
-                      ? 'bg-gray-100 text-gray-800'
-                      : 'bg-red-100 text-red-800'
-                  }`}
-                >
-                  {order.status}
-                </span>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            {paginatedOrders.map((order) => (
+              <Card
+                key={order.id}
+                className="bg-white/30 backdrop-blur-md transition shadow"
+              >
+                <CardHeader>
+                  <CardTitle>{order.restaurant}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <ul className="list-disc pl-5 text-gray-700">
+                    {order.items.map((item) => (
+                      <li key={item.id}>
+                        {item.name} x {item.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="font-semibold text-green-700">
+                    Total: ${order.total.toFixed(2)}
+                  </p>
+                  <p className="text-sm text-gray-500">Status: {order.status}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="flex justify-center items-center gap-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="p-2 rounded bg-white/50 hover:bg-white/70 disabled:opacity-50"
+            >
+              <ChevronLeft />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`px-3 py-1 rounded ${
+                  page === currentPage
+                    ? 'bg-green-600 text-white'
+                    : 'bg-white/70 text-gray-800 hover:bg-white'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded bg-white/50 hover:bg-white/70 disabled:opacity-50"
+            >
+              <ChevronRight />
+            </button>
+          </div>
+        </>
       )}
     </main>
   );
