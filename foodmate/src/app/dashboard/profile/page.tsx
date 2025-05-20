@@ -42,7 +42,7 @@ export default function UserProfilePage() {
   return (
     <main className="h-full p-6 bg-white/30 backdrop-blur-md rounded-2xl">
       <h1 className="text-3xl font-bold mb-6 flex items-center gap-2">
-        <User />
+        
         My Profile
       </h1>
 

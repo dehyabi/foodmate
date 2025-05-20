@@ -26,6 +26,7 @@ type Order = {
   items: { id: string; name: string; quantity: number }[];
   total: number;
   status: 'Pending';
+  user: string;
 };
 
 type Favorite = {
@@ -39,8 +40,20 @@ export default function UserRestaurantsPage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [userName, setUserName] = useState<string>('Guest');
 
   useEffect(() => {
+    // Load user name from localStorage
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        const parsed = JSON.parse(user);
+        setUserName(parsed.name || 'Guest');
+      } catch {
+        setUserName('Guest');
+      }
+    }
+
     const stored = localStorage.getItem('restaurants');
     if (stored) {
       try {
@@ -72,6 +85,7 @@ export default function UserRestaurantsPage() {
       items: [{ id: item.id, name: item.name, quantity: 1 }],
       total: item.price,
       status: 'Pending',
+      user: userName, // ✅ Save user's name
     };
 
     const existingOrders = localStorage.getItem('orders');
