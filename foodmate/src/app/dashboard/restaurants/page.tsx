@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Heart } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type MenuItem = {
@@ -27,9 +28,17 @@ type Order = {
   status: 'Pending';
 };
 
+type Favorite = {
+  id: string;
+  name: string;
+  type: 'Restaurant';
+  description: string;
+};
+
 export default function UserRestaurantsPage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
     const stored = localStorage.getItem('restaurants');
@@ -41,12 +50,25 @@ export default function UserRestaurantsPage() {
         console.error('Failed to parse restaurants from localStorage:', err);
       }
     }
+
+    const favs = localStorage.getItem('favorites');
+    if (favs) {
+      try {
+        const parsedFavs: Favorite[] = JSON.parse(favs);
+        const favIds = parsedFavs.map((fav) => fav.id);
+        setFavorites(favIds);
+      } catch (err) {
+        console.error('Failed to parse favorites from localStorage:', err);
+      }
+    }
   }, []);
 
   const handleOrder = (item: MenuItem) => {
+    if (!selectedRestaurant) return;
+
     const order: Order = {
       id: `o-${Date.now()}`,
-      restaurant: selectedRestaurant!.name,
+      restaurant: selectedRestaurant.name,
       items: [{ id: item.id, name: item.name, quantity: 1 }],
       total: item.price,
       status: 'Pending',
@@ -57,7 +79,31 @@ export default function UserRestaurantsPage() {
 
     localStorage.setItem('orders', JSON.stringify([...parsed, order]));
 
-    toast.success(`Ordered ${item.name} from ${selectedRestaurant!.name}`);
+    toast.success(`Ordered ${item.name} from ${selectedRestaurant.name}`);
+  };
+
+  const toggleFavorite = (restaurant: Restaurant) => {
+    let updatedFavorites: string[];
+
+    if (favorites.includes(restaurant.id)) {
+      updatedFavorites = favorites.filter((id) => id !== restaurant.id);
+    } else {
+      updatedFavorites = [...favorites, restaurant.id];
+    }
+
+    setFavorites(updatedFavorites);
+
+    const detailedFavorites: Favorite[] = updatedFavorites.map((id) => {
+      const r = restaurants.find((res) => res.id === id)!;
+      return {
+        id: r.id,
+        name: r.name,
+        type: 'Restaurant',
+        description: r.description,
+      };
+    });
+
+    localStorage.setItem('favorites', JSON.stringify(detailedFavorites));
   };
 
   return (
@@ -69,17 +115,32 @@ export default function UserRestaurantsPage() {
           {restaurants.map((restaurant) => (
             <Card
               key={restaurant.id}
-              onClick={() => setSelectedRestaurant(restaurant)}
-              className="bg-white/30 backdrop-blur-md hover:shadow-lg transition cursor-pointer"
+              className="bg-white/30 backdrop-blur-md hover:shadow-lg transition relative group"
             >
-              <CardHeader>
-                <CardTitle>{restaurant.name}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <p className="text-gray-700">{restaurant.description}</p>
-                <p className="text-gray-700">Cuisine: {restaurant.cuisine}</p>
-                <p className="text-yellow-600">⭐ {restaurant.rating.toFixed(1)}</p>
-              </CardContent>
+              <button
+                onClick={() => toggleFavorite(restaurant)}
+                className={`absolute top-2 right-2 z-10 p-2 rounded-full transition ${
+                  favorites.includes(restaurant.id)
+                    ? 'bg-pink-500 text-white'
+                    : 'bg-white/70 text-gray-500 hover:bg-pink-100'
+                }`}
+              >
+                <Heart
+                  fill={favorites.includes(restaurant.id) ? 'white' : 'none'}
+                  className="w-5 h-5"
+                />
+              </button>
+
+              <div onClick={() => setSelectedRestaurant(restaurant)} className="p-4 cursor-pointer">
+                <CardHeader>
+                  <CardTitle>{restaurant.name}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-gray-700">{restaurant.description}</p>
+                  <p className="text-gray-700">Cuisine: {restaurant.cuisine}</p>
+                  <p className="text-yellow-600">⭐ {restaurant.rating.toFixed(1)}</p>
+                </CardContent>
+              </div>
             </Card>
           ))}
         </div>
