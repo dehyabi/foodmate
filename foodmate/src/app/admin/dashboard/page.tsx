@@ -10,28 +10,36 @@ export default function AdminDashboard() {
   const [userCount, setUserCount] = useState(0);
 
   useEffect(() => {
-    // Seed if not already done
     seedRestaurants();
 
-    // Load restaurants
-    const restaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
-    setRestaurantCount(restaurants.length);
+    try {
+      const restaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
+      setRestaurantCount(restaurants.length);
+    } catch (err) {
+      console.error('Failed to parse restaurants:', err);
+    }
 
-    // Load orders
-    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    setOrderCount(orders.length);
+    try {
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      setOrderCount(orders.length);
+    } catch (err) {
+      console.error('Failed to parse orders:', err);
+    }
 
-    // Load users
-    const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    setUserCount(users.length);
+    try {
+      const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      setUserCount(users.length);
+    } catch (err) {
+      console.error('Failed to parse registeredUsers:', err);
+    }
   }, []);
 
   return (
-    <main className="h-[100%] overflow-hidden p-6 bg-white/30 backdrop-blur-md rounded-2xl">
+    <main className="h-full overflow-hidden p-6 bg-white/30 backdrop-blur-md rounded-2xl">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="bg-white/30 backdrop-blur-md">
+        <Card className="bg-white/30 backdrop-blur-md hover:shadow-md transition">
           <CardHeader>
             <CardTitle>Total Orders</CardTitle>
           </CardHeader>
@@ -40,7 +48,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white/30 backdrop-blur-md">
+        <Card className="bg-white/30 backdrop-blur-md hover:shadow-md transition">
           <CardHeader>
             <CardTitle>Active Restaurants</CardTitle>
           </CardHeader>
@@ -49,7 +57,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white/30 backdrop-blur-md">
+        <Card className="bg-white/30 backdrop-blur-md hover:shadow-md transition">
           <CardHeader>
             <CardTitle>Registered Users</CardTitle>
           </CardHeader>
