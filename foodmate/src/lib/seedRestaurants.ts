@@ -46,45 +46,6 @@ export function seedRestaurants() {
     localStorage.setItem('restaurants', JSON.stringify(restaurants));
   }
 
-  // Seed orders if not already
-  if (!existingOrders) {
-    const orders = [
-      {
-        id: 'o1',
-        restaurantId: 'r1',
-        items: [
-          { id: 'm1', name: 'Spaghetti Bolognese', quantity: 2 },
-          { id: 'm2', name: 'Penne Alfredo', quantity: 1 },
-        ],
-        total: 34,
-        user: 'user1@example.com',
-        status: 'completed',
-      },
-      {
-        id: 'o2',
-        restaurantId: 'r2',
-        items: [
-          { id: 'm4', name: 'Classic Beef Burger', quantity: 1 },
-          { id: 'm6', name: 'Vegan Burger', quantity: 2 },
-        ],
-        total: 29,
-        user: 'user2@example.com',
-        status: 'pending',
-      },
-      {
-        id: 'o3',
-        restaurantId: 'r3',
-        items: [
-          { id: 'm7', name: 'Salmon Nigiri', quantity: 1 },
-          { id: 'm8', name: 'Tuna Roll', quantity: 1 },
-        ],
-        total: 26,
-        user: 'user3@example.com',
-        status: 'completed',
-      },
-    ];
-
-    localStorage.setItem('orders', JSON.stringify(orders));
-  }
+  
 }
 
