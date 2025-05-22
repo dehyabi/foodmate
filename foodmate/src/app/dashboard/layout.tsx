@@ -79,7 +79,7 @@ export default function UserDashboardLayout({
 
       {/* Sidebar Toggle (Mobile) */}
       <button
-        className="md:hidden absolute top-4 left-4 z-50 bg-white/80 p-2 rounded"
+        className="md:hidden absolute top-12 right-12 z-50 bg-white/70 p-1 rounded"
         onClick={() => setSidebarOpen(!sidebarOpen)}
       >
         <Menu />
@@ -91,7 +91,7 @@ export default function UserDashboardLayout({
           <div className="w-64 h-full bg-white/80 backdrop-blur-md p-6 shadow-lg">
             <SidebarNav />
             <button
-              className="mt-6 text-red-500"
+              className="mt-6 text-red-500 absolute bottom-4 ml-5"
               onClick={() => {
                 setSidebarOpen(false);
                 handleLogout();
