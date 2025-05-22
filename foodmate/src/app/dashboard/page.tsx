@@ -1,33 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { fetchOrders, fetchFavorites } from '@/lib/localFetch';
 
 export default function UserDashboard() {
-  const [ordersCount, setOrdersCount] = useState(0);
-  const [favoritesCount, setFavoritesCount] = useState(0);
+  const { data: orders = [], isLoading: loadingOrders } = useQuery({
+    queryKey: ['orders'],
+    queryFn: fetchOrders,
+  });
 
-  useEffect(() => {
-    const storedOrders = localStorage.getItem('orders');
-    if (storedOrders) {
-      try {
-        const orders = JSON.parse(storedOrders);
-        setOrdersCount(orders.length);
-      } catch (err) {
-        console.error('Failed to parse orders:', err);
-      }
-    }
-
-    const storedFavorites = localStorage.getItem('favorites');
-    if (storedFavorites) {
-      try {
-        const favorites = JSON.parse(storedFavorites);
-        setFavoritesCount(favorites.length);
-      } catch (err) {
-        console.error('Failed to parse favorites:', err);
-      }
-    }
-  }, []);
+  const { data: favorites = [], isLoading: loadingFavorites } = useQuery({
+    queryKey: ['favorites'],
+    queryFn: fetchFavorites,
+  });
 
   return (
     <main className="h-[100%] overflow-hidden p-6 bg-white/30 backdrop-blur-md rounded-2xl">
@@ -39,7 +25,11 @@ export default function UserDashboard() {
             <CardTitle>My Orders</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold">{ordersCount}</p>
+            {loadingOrders ? (
+              <p className="text-gray-500 text-sm">Loading...</p>
+            ) : (
+              <p className="text-2xl font-semibold">{orders.length}</p>
+            )}
           </CardContent>
         </Card>
 
@@ -48,7 +38,11 @@ export default function UserDashboard() {
             <CardTitle>Favorite Restaurants</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold">{favoritesCount}</p>
+            {loadingFavorites ? (
+              <p className="text-gray-500 text-sm">Loading...</p>
+            ) : (
+              <p className="text-2xl font-semibold">{favorites.length}</p>
+            )}
           </CardContent>
         </Card>
       </div>

@@ -58,12 +58,6 @@ export default function UserDashboardLayout({
       {/* Toast Notifications */}
       <Toaster position="top-right" />
 
-      {/* Background */}
-      <div
-        className="absolute inset-0 -z-10 bg-cover bg-center opacity-60 backdrop-blur-sm"
-        style={{ backgroundImage: "url('/bg-foodmate.webp')" }}
-      />
-
       {/* Sidebar (Desktop) */}
       <aside className="hidden md:flex flex-col w-64 bg-white/30 backdrop-blur-md border-r border-white/20 p-6">
         <h2 className="text-xl font-bold mb-6">User Panel</h2>

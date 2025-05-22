@@ -12,11 +12,6 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen flex flex-col p-6">
-      {/* Background image */}
-      <div
-        className="absolute inset-0 -z-10 bg-cover bg-center opacity-60"
-        style={{ backgroundImage: "url('/bg-foodmate.webp')" }}
-      />
 
       {/* Top navigation */}
       <div className="flex justify-between items-center mb-8 relative">

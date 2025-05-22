@@ -63,10 +63,6 @@ export default function LoginPage() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center p-6">
-      <div
-        className="absolute inset-0 -z-10 bg-cover bg-center opacity-60 backdrop-blur-sm"
-        style={{ backgroundImage: "url('/bg-foodmate.webp')" }}
-      />
 
       <Card className="w-full max-w-sm bg-white/30 backdrop-blur-md shadow-xl border-none outline-none ring-0">
         <CardHeader>
