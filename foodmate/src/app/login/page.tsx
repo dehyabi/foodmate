@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,35 +13,48 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { useState } from 'react';
+
+const LoginSchema = z.object({
+  email: z.string().email({ message: 'Invalid email format' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+});
+
+type LoginForm = z.infer<typeof LoginSchema>;
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const router = useRouter();
+  const [error, setError] = useState('');
 
-  const handleLogin = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    resolver: zodResolver(LoginSchema),
+  });
+
+  const onSubmit = (data: LoginForm) => {
+    const { email, password } = data;
     setError('');
 
-    // Admin hardcoded login
+    // Admin login (hardcoded)
     if (email === 'admin@foodmate.com' && password === 'admin123') {
       localStorage.setItem('user', JSON.stringify({ email, role: 'admin', status: 'online' }));
       router.push('/admin/dashboard');
       return;
     }
 
-    // User login from registeredUsers in localStorage
+    // Registered users login
     const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    const foundUser = users.find(user => user.email === email && user.password === password);
+    const foundUser = users.find((user: any) => user.email === email && user.password === password);
 
     if (foundUser) {
-      // Update status to online
-      const updatedUsers = users.map(user =>
+      const updatedUsers = users.map((user: any) =>
         user.email === email ? { ...user, status: 'online' } : user
       );
       localStorage.setItem('registeredUsers', JSON.stringify(updatedUsers));
       localStorage.setItem('user', JSON.stringify({ ...foundUser, status: 'online' }));
-
       router.push('/dashboard');
     } else {
       setError('Invalid email or password.');
@@ -48,57 +63,48 @@ export default function LoginPage() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center p-6">
-      {/* Background image */}
       <div
         className="absolute inset-0 -z-10 bg-cover bg-center opacity-60 backdrop-blur-sm"
         style={{ backgroundImage: "url('/bg-foodmate.webp')" }}
       />
 
-      {/* Login Card */}
       <Card className="w-full max-w-sm bg-white/30 backdrop-blur-md shadow-xl border-none outline-none ring-0">
         <CardHeader>
           <CardTitle className="text-2xl text-center">Login to FoodMate</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-            />
-          </div>
-
-          {/* Error message */}
-          {error && (
-            <p className="text-red-600 text-sm text-center">{error}</p>
-          )}
-
-          <Button className="w-full" onClick={handleLogin}>
-            Sign In
-          </Button>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" {...register('email')} autoComplete="email" />
+              {errors.email && (
+                <p className="text-sm text-red-600">{errors.email.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                {...register('password')}
+                autoComplete="current-password"
+              />
+              {errors.password && (
+                <p className="text-sm text-red-600">{errors.password.message}</p>
+              )}
+            </div>
+            {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+            <Button type="submit" className="w-full">
+              Sign In
+            </Button>
+          </form>
 
           <p className="text-xs text-center text-muted-foreground">
-  	Don&apos;t have an account?{' '}
-	  <a href="/register" className="text-blue-600 hover:underline">
-    	   Register here
-           </a>
-	</p>
-
+            Don&apos;t have an account?{' '}
+            <a href="/register" className="text-blue-600 hover:underline">
+              Register here
+            </a>
+          </p>
         </CardContent>
       </Card>
     </main>
