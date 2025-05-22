@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Star } from 'lucide-react'; // Replace Utensils with Star or Heart icon if preferred
 
 type Favorite = {
   id: string;
@@ -33,7 +34,11 @@ export default function UserFavoritesPage() {
       </h1>
 
       {favorites.length === 0 ? (
-        <p className="text-gray-600 text-sm">You have no favorites yet.</p>
+        <div className="flex flex-col items-center justify-center text-center text-gray-600 mt-20">
+          <Heart className="w-16 h-16 mb-4 text-gray-500" />
+          <p className="text-lg font-medium">No favorites yet</p>
+          <p className="text-sm">Your favorited restaurants will appear here.</p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {favorites.map((fav) => (

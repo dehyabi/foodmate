@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Utensils } from 'lucide-react';
 
 type Order = {
   id: string;
@@ -46,7 +46,11 @@ export default function UserOrdersPage() {
       <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
 
       {orders.length === 0 ? (
-        <p className="text-gray-600">You have no orders yet.</p>
+        <div className="flex flex-col items-center justify-center text-center text-gray-600 mt-20">
+          <Utensils className="w-16 h-16 mb-4 text-gray-500" />
+          <p className="text-lg font-medium">No orders found</p>
+          <p className="text-sm">Your orders will appear here.</p>
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
