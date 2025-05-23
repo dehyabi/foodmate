@@ -79,9 +79,8 @@ prune-all:
 help:
 	@echo ""
 	@echo "Available commands:"
-	@echo "  make run-local       			Run app locally (requires virtualenv & dependencies)"
 	@echo "  make docker-up       			Start containers (no rebuild)"
-	@echo "  make docker-up-prod   		Start containers (no rebuild) in PRODUCTION"
+	@echo "  make docker-up-prod   			Start containers (no rebuild) in PRODUCTION"
 	@echo "  make docker-build    			Build & start containers (keep volumes)"
 	@echo "  make docker-build-prod    		Build & start containers (keep volumes) in PRODUCTION"
 	@echo "  make docker-build-clean		Clean build & start containers (no-cache, keep volumes)"
