@@ -1,19 +1,45 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { fetchOrders, fetchFavorites } from '@/lib/localFetch';
+import socket from '@/lib/websocketClient';
+import { fetchGrpcOrders, fetchGrpcFavorites } from '@/lib/grpcClient';
 
 export default function UserDashboard() {
+  const queryClient = useQueryClient();
+  const [wsConnected, setWsConnected] = useState(false);
+
   const { data: orders = [], isLoading: loadingOrders } = useQuery({
     queryKey: ['orders'],
-    queryFn: fetchOrders,
+    queryFn: fetchGrpcOrders,
   });
 
   const { data: favorites = [], isLoading: loadingFavorites } = useQuery({
     queryKey: ['favorites'],
-    queryFn: fetchFavorites,
+    queryFn: fetchGrpcFavorites,
   });
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      setWsConnected(true);
+      console.log('WebSocket connected');
+    });
+
+    socket.on('order-updated', (newOrders) => {
+      queryClient.setQueryData(['orders'], newOrders);
+    });
+
+    socket.on('favorites-updated', (newFavorites) => {
+      queryClient.setQueryData(['favorites'], newFavorites);
+    });
+
+    return () => {
+      socket.off('connect');
+      socket.off('order-updated');
+      socket.off('favorites-updated');
+    };
+  }, [queryClient]);
 
   return (
     <main className="h-[100%] overflow-hidden p-6 bg-white/30 backdrop-blur-md rounded-2xl">
@@ -46,6 +72,7 @@ export default function UserDashboard() {
           </CardContent>
         </Card>
       </div>
+
     </main>
   );
 }

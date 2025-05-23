@@ -10,3 +10,13 @@ services:
       - "3000:3000"
     stdin_open: true
     tty: true
+    depends_on:
+      - socket-server
+
+  socket-server:
+    build:
+      context: ./socket-server
+    container_name: foodmate-socket
+    ports:
+      - "3001:3001"
+
