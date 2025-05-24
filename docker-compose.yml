@@ -6,12 +6,14 @@ services:
     container_name: foodmate
     volumes:
       - .:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
     stdin_open: true
     tty: true
     depends_on:
       - socket-server
+      - grpc-server
 
   socket-server:
     build:
@@ -19,4 +21,19 @@ services:
     container_name: foodmate-socket
     ports:
       - "3001:3001"
+    volumes:
+      - ./socket-server:/app
+      - /app/node_modules
+    command: npm run dev
+
+  grpc-server:
+    build:
+      context: ./grpc-server
+    container_name: foodmate-grpc
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./grpc-server:/app
+      - /app/node_modules
+    command: npm start
 

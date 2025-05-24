@@ -1,0 +1,33 @@
+[
+  {
+    "id": "r1",
+    "name": "Pasta Palace",
+    "description": "Best handmade pasta in town.",
+    "type": "Restaurant"
+  },
+  {
+    "id": "r2",
+    "name": "Burger World",
+    "description": "Juiciest burgers you'll ever eat.",
+    "type": "Restaurant"
+  },
+  {
+    "id": "r3",
+    "name": "Sushi Hub",
+    "description": "Fresh sushi made with authentic Japanese ingredients.",
+    "type": "Restaurant"
+  },
+  {
+    "id": "r4",
+    "name": "Taco Fiesta",
+    "description": "Spicy Mexican street tacos bursting with flavor.",
+    "type": "Food Truck"
+  },
+  {
+    "id": "r5",
+    "name": "Curry House",
+    "description": "Aromatic Indian curries served with warm naan.",
+    "type": "Restaurant"
+  }
+]
+

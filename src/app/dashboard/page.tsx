@@ -10,16 +10,28 @@ export default function UserDashboard() {
   const queryClient = useQueryClient();
   const [wsConnected, setWsConnected] = useState(false);
 
-  const { data: orders = [], isLoading: loadingOrders } = useQuery({
+  // gRPC: Fetch data (with no auto-refetch on window focus)
+  const {
+    data: orders = [],
+    isLoading: loadingOrders,
+    refetch: refetchOrders,
+  } = useQuery({
     queryKey: ['orders'],
     queryFn: fetchGrpcOrders,
+    refetchOnWindowFocus: false,
   });
 
-  const { data: favorites = [], isLoading: loadingFavorites } = useQuery({
+  const {
+    data: favorites = [],
+    isLoading: loadingFavorites,
+    refetch: refetchFavorites,
+  } = useQuery({
     queryKey: ['favorites'],
     queryFn: fetchGrpcFavorites,
+    refetchOnWindowFocus: false,
   });
 
+  // Socket.IO: Realtime updates
   useEffect(() => {
     socket.on('connect', () => {
       setWsConnected(true);
@@ -27,15 +39,29 @@ export default function UserDashboard() {
     });
 
     socket.on('order-updated', (newOrders) => {
-      queryClient.setQueryData(['orders'], newOrders);
+      if (Array.isArray(newOrders) && newOrders.length > 0) {
+        queryClient.setQueryData(['orders'], newOrders);
+      } else {
+        console.warn('Skipped updating orders: empty or invalid data.');
+      }
     });
 
     socket.on('favorites-updated', (newFavorites) => {
-      queryClient.setQueryData(['favorites'], newFavorites);
+      if (Array.isArray(newFavorites) && newFavorites.length > 0) {
+        queryClient.setQueryData(['favorites'], newFavorites);
+      } else {
+        console.warn('Skipped updating favorites: empty or invalid data.');
+      }
+    });
+
+    socket.on('disconnect', () => {
+      setWsConnected(false);
+      console.log('WebSocket disconnected');
     });
 
     return () => {
       socket.off('connect');
+      socket.off('disconnect');
       socket.off('order-updated');
       socket.off('favorites-updated');
     };
@@ -54,7 +80,12 @@ export default function UserDashboard() {
             {loadingOrders ? (
               <p className="text-gray-500 text-sm">Loading...</p>
             ) : (
-              <p className="text-2xl font-semibold">{orders.length}</p>
+              <>
+                <p className="text-2xl font-semibold">{orders.length}</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Most recent: {orders[0]?.restaurant || 'N/A'}
+                </p>
+              </>
             )}
           </CardContent>
         </Card>
@@ -67,12 +98,16 @@ export default function UserDashboard() {
             {loadingFavorites ? (
               <p className="text-gray-500 text-sm">Loading...</p>
             ) : (
-              <p className="text-2xl font-semibold">{favorites.length}</p>
+              <>
+                <p className="text-2xl font-semibold">{favorites.length}</p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Top pick: {favorites[0]?.name || 'N/A'}
+                </p>
+              </>
             )}
           </CardContent>
         </Card>
       </div>
-
     </main>
   );
 }
