@@ -3,8 +3,8 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Install vim
-RUN apk add --no-cache vim
+# Install git, openssh, and vim
+RUN apk add --no-cache git openssh vim
 
 # Copy package.json files before install
 COPY package*.json ./
