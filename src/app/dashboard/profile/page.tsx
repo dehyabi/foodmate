@@ -4,7 +4,13 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { User } from 'lucide-react';
+
+type UserType = {
+  email: string;
+  name: string;
+  password: string;
+  role?: string;
+};
 
 export default function UserProfilePage() {
   const [user, setUser] = useState<{ email: string; name: string; password: string } | null>(null);
@@ -29,7 +35,7 @@ export default function UserProfilePage() {
     localStorage.setItem('user', JSON.stringify(formData));
 
     const allUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    const updated = allUsers.map((u: any) =>
+    const updated = allUsers.map((u: UserType) =>
       u.email === user?.email ? { ...u, ...formData } : u
     );
     localStorage.setItem('registeredUsers', JSON.stringify(updated));

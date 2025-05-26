@@ -15,6 +15,14 @@ import {
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 
+type UserType = {
+  email: string;
+  password: string;
+  role?: string;
+  status?: string;
+  name?: string;
+};
+
 const LoginSchema = z.object({
   email: z.string().email({ message: 'Invalid email format' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
@@ -47,10 +55,10 @@ export default function LoginPage() {
 
     // Registered users login
     const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    const foundUser = users.find((user: any) => user.email === email && user.password === password);
+    const foundUser = users.find((user: UserType) => user.email === email && user.password === password);
 
     if (foundUser) {
-      const updatedUsers = users.map((user: any) =>
+      const updatedUsers = users.map((user: UserType) =>
         user.email === email ? { ...user, status: 'online' } : user
       );
       localStorage.setItem('registeredUsers', JSON.stringify(updatedUsers));

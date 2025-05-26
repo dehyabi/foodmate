@@ -29,7 +29,7 @@ export function SidebarNav() {
     try {
       const parsed: User = JSON.parse(storedUser);
       setUser(parsed);
-    } catch (err) {
+    } catch {
       console.error('Invalid user data in localStorage');
     }
   }, []);

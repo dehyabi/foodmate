@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { Heart } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Star } from 'lucide-react'; // Replace Utensils with Star or Heart icon if preferred
 
 type Favorite = {
   id: string;

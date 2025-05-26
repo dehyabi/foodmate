@@ -1,6 +1,5 @@
 export function seedRestaurants() {
   const existingRestaurants = localStorage.getItem('restaurants');
-  const existingOrders = localStorage.getItem('orders');
 
   // Seed restaurants if not already
   if (!existingRestaurants) {

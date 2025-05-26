@@ -3,6 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Menu, LogOut } from 'lucide-react';
+
+type User = {
+  email: string;
+  role: string;
+  status?: string;
+};
 import { SidebarNav } from '@/components/sidebar-nav';
 import { Toaster } from 'react-hot-toast';
 
@@ -44,7 +50,7 @@ export default function UserDashboardLayout({
     const loggedUser = JSON.parse(loggedUserRaw);
     const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
 
-    const updatedUsers = users.map((user: any) =>
+    const updatedUsers = users.map((user: User) =>
       user.email === loggedUser.email ? { ...user, status: 'offline' } : user
     );
 

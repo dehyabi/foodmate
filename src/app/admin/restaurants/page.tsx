@@ -28,7 +28,7 @@ export default function AdminRestaurantsPage() {
       const parsed = JSON.parse(stored);
 
       // Add fallback `location` and `status` if missing
-      const enriched = parsed.map((r: any, index: number) => ({
+      const enriched = parsed.map((r: Restaurant, index: number) => ({
         ...r,
         location: r.location || ['New York', 'Tokyo', 'Los Angeles'][index % 3],
         status: r.status || (index % 2 === 0 ? 'Open' : 'Closed'),

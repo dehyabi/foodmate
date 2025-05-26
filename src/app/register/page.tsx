@@ -14,6 +14,17 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
+type FormData = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+type User = FormData & {
+  role: string;
+  status: string;
+};
+
 const registerSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z
@@ -32,14 +43,14 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormData>({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: any) => {
-    const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+  const onSubmit = (data: FormData) => {
+    const existingUsers: User[] = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
 
-    const emailExists = existingUsers.some((user: any) => user.email === data.email);
+    const emailExists = existingUsers.some((user: User) => user.email === data.email);
     if (emailExists) {
       alert('Email is already registered.');
       return;

@@ -2,9 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Menu, LogOut } from 'lucide-react';
 import { SidebarNav } from '@/components/sidebar-nav';
+
+type User = {
+  email: string;
+  role: string;
+  status?: string;
+  name?: string;
+};
 
 export default function AdminDashboardLayout({
   children,
@@ -33,12 +39,16 @@ export default function AdminDashboardLayout({
   if (isAdmin === null) return null; // Loading state
 
   const handleLogout = () => {
-  const loggedUser = JSON.parse(localStorage.getItem('user'));
-  if (!loggedUser) return;
+    const userData = localStorage.getItem('user');
+    if (!userData) {
+      router.push('/login');
+      return;
+    }
+    
+    const loggedUser = JSON.parse(userData);
+    const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
 
-  const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-
-  const updatedUsers = users.map(user =>
+  const updatedUsers = users.map((user: User) =>
     user.email === loggedUser.email ? { ...user, status: 'offline' } : user
   );
 
