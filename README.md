@@ -12,6 +12,8 @@
 * **State Management:** TanStack Query (React Query)
 * **Dockerized:** Multi-service environment with Docker
 * **Mock Data:** JSON files (Favorites, Orders, Menus)
+* **Form Validation:** Zod & React Hook Form
+* **UI Components:** TailwindCSS & ShadCN UI
 
 ---
 
@@ -36,6 +38,8 @@
 * ⚡ **TanStack Query** – Cache and revalidate data efficiently
 * 📦 **Mock APIs** – Load JSON data (orders, favorites, menus)
 * 💅 **Glassmorphism UI** – Clean, modern, and responsive dashboard
+* 🔢 **Form Validation** – Powered by Zod & React Hook Form
+* 📏 **Component UI** – Built using TailwindCSS and ShadCN
 
 ---
 
