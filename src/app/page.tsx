@@ -18,7 +18,7 @@ export default function Home() {
         {/* Logo center on mobile */}
         <div className="flex-1 flex justify-center md:justify-start">
           <Image
-            src="/logo-foodmate.png"
+            src="/foodmate/logo-foodmate.png"
             alt="FoodMate Logo"
             width={140}
             height={60}
