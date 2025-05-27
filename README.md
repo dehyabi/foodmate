@@ -106,8 +106,6 @@ Located in: `grpc-server/mock`
 
 * `favorites.json`
 * `orders.json`
-* `restaurants.json`
-* `menus.json`
 
 ---
 
