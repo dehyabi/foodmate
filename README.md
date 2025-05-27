@@ -124,19 +124,20 @@ Located in: `grpc-server/mock`
 
 ---
 
-## 👨‍🍳 Authors
+## 📽️ Demo
 
-* **Dehya Qalbi** – Fullstack Developer @FoodMate
+[FoodMate Live Demo](https://dehyabi.github.io/foodmate)
+
+---
+
+## 📬 Contact
+
+- Email: dehyafullstack@gmail.com
+- LinkedIn: linkedin.com/in/dehyabi
+- GitHub: github.com/dehyabi
 
 ---
 
 ## 📄 License
 
 MIT © 2025 FoodMate
-
----
-
-## 📽️ Demo
-
-[FoodMate Live Demo](https://dehyabi.github.io/foodmate)
-
