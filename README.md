@@ -1,6 +1,6 @@
 # 🍽️ FoodMate
 
-**FoodMate** is a modern food ordering dashboard built with **Next.js 14**, **gRPC**, **WebSocket (Socket.IO)**, and **TanStack Query**. It supports real-time order updates and data fetching from gRPC and local mock APIs.
+**FoodMate** is a modern food ordering dashboard built with **Next.js 15**, **gRPC**, **WebSocket (Socket.IO)**, and **TanStack Query**. It supports real-time order updates and data fetching from gRPC and local mock APIs.
 
 ---
 
