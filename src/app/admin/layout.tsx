@@ -65,7 +65,7 @@ export default function AdminDashboardLayout({
       {/* Background image with blur */}
       <div
         className="absolute inset-0 -z-10 bg-cover bg-center opacity-60 backdrop-blur-sm"
-        style={{ backgroundImage: "url('/bg-foodmate.webp')" }}
+        style={{ backgroundImage: "url('/foodmate/bg-foodmate.webp')" }}
       />
 
       {/* Sidebar - Desktop */}

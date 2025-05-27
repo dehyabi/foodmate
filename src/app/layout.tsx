@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     "Order food from your favorite restaurants with FoodMate — fast delivery, great taste.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/foodmate/favicon.ico",
   },
 };
 
@@ -35,7 +35,7 @@ export default function RootLayout({
         {/* Global Background Image */}
         <div
           className="absolute inset-0 -z-10 bg-cover bg-center opacity-60 backdrop-blur-sm"
-          style={{ backgroundImage: "url('/bg-foodmate.webp')" }}
+          style={{ backgroundImage: "url('/foodmate/bg-foodmate.webp')" }}
         />
 
         <Providers>
