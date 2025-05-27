@@ -105,7 +105,7 @@ export default function LoginPage() {
 
           <p className="text-xs text-center text-muted-foreground">
             Don&apos;t have an account?{' '}
-            <a href="/register" className="text-blue-600 hover:underline">
+            <a href="/foodmate/register" className="text-blue-600 hover:underline">
               Register here
             </a>
           </p>
